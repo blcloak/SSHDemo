@@ -1,10 +1,7 @@
 package com.demo.action;
 
-import java.util.List;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -13,53 +10,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.entity.User;
 import com.demo.service.IUserService;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 @ParentPackage("basePackage")
 @Namespace("/")
 public class LoginAction extends ActionSupport {
 	private static final long serialVersionUID = 6912391687787646716L;
-	private static final String FAIL = null;
 
 	private IUserService userService;
 	private User user;
-	List<User> users;
-
-	@Transactional
-	@Action(value = "userAdd", results = {
-			@Result(name = "success", type="redirect", location = "get"),
-			@Result(name = "fail", location = "/jsp/fail.jsp") })
-	public String addUser() {
-		try {
-			userService.addUser(user);
-			return SUCCESS;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return FAIL;
-		}
-	}
-	@Transactional
-	@Action(value = "get", results = {
-			@Result(name = "success", location = "/jsp/list.jsp"),
-			@Result(name = "fail", location = "/jsp/fail.jsp") })
-	public String getUsers() {
-		try {
-			users = userService.getUsers();
-			HttpServletRequest request = ServletActionContext.getRequest();
-			request.setAttribute("users", users);
-			return SUCCESS;
-		} catch (Exception e) {
-			return FAIL;
-		}
-	}
+	Map<Integer, Integer> authority;
 
 	@Transactional
 	@Action(value = "logIn", results = {
-			@Result(name = "success", location = "/jsp/list.jsp"),
+			@Result(name = "success", type="redirect", location = "get"),
 			@Result(name = "input", location = "/jsp/logIn.jsp") })
 	public String logIn() {
 		User userCheck = userService.getUserByName(user.getUsername());
 		if (userCheck != null && userCheck.getPassword().equals(user.getPassword())) {
+			authority = userService.getAuthority(user.getUsername());
+			ActionContext.getContext().getSession().put("loginUser", user.getUsername());
 			return SUCCESS;
 		}
 		return INPUT;

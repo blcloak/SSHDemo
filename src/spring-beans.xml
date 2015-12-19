@@ -14,5 +14,15 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
     
+    <bean id="bookService"
+        class="com.demo.serviceimpl.BookService">
+        <property name="bookDao" ref="bookDao" />
+    </bean>
     
+    <bean id="bookDao"
+        class="com.demo.daoimpl.BookDao">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    
+    <bean id="longinIntercept" class="com.demo.common.LoginIntercept"></bean>
 </beans>

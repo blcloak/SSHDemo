@@ -36,6 +36,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		<property name="dataSource" ref="dataSource" />
 		<property name="hibernateProperties">
 			<props>
+				<!-- 根据需要自动创建数据库表 -->
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
@@ -67,8 +68,12 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 	</bean>
 
 	<!-- 注解方式配置事物 -->
-	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
-
+	<!-- <tx:annotation-driven transaction-manager="transactionManager"/> -->
+	
+	<!-- 用注解方式注入bean -->
+	<!-- <context:annotation-config /> -->
+	<!-- <context:component-scan base-package="com.blog" /> -->
+	
 	<!-- 拦截器方式配置事物 -->
 	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
@@ -78,6 +83,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 			<tx:method name="modify*" />
 			<tx:method name="edit*" />
 			<tx:method name="delete*" />
+			<tx:method name="del*" />
 			<tx:method name="remove*" />
 			<tx:method name="repair" />
 			<tx:method name="deleteAndRepair" />

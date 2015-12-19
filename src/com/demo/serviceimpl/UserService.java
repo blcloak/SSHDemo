@@ -1,6 +1,7 @@
 package com.demo.serviceimpl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.demo.dao.IUserDao;
 import com.demo.entity.User;
@@ -30,6 +31,13 @@ public class UserService implements IUserService {
 		
 		return userDao.getUserByName(userName);
 	}
+
+	@Override
+	public Map<Integer, Integer> getAuthority(String userName) {
+		
+		return userDao.getAuthority(userName);
+	}
+	
 	
 	
 

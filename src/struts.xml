@@ -4,9 +4,8 @@
 
 	<!-- 指定由spring负责action对象的创建 -->
 	<constant name="struts.objectFactory" value="spring" />
-	<!-- 所有匹配*.action的请求都由struts2处理  
-	<constant name="struts.action.extension" value="action" />
-	-->
+	<!-- 所有匹配*.action的请求都由struts2处理 <constant name="struts.action.extension" 
+		value="action" /> -->
 	<!-- 是否启用开发模式 -->
 	<constant name="struts.devMode" value="true" />
 	<!-- struts配置文件改动后，是否重新加载 -->
@@ -29,6 +28,22 @@
 	<constant name="struts.dispatcher.parametersWorkaround" value="false" />
 
 	<package name="basePackage" extends="struts-default">
+		<interceptors>
+			<interceptor name="LoginInterceptor" class="longinIntercept"/>
+				
+			<interceptor-stack name="myInterceptors">
+				<interceptor-ref name="LoginInterceptor">
+					<param name="excludeMethods">logIn</param>
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		
+		<default-interceptor-ref name="myInterceptors"></default-interceptor-ref>
+		
+		<global-results>
+			<result name="login" type="redirect">/jsp/logIn.jsp</result>
+		</global-results>
 
 
 	</package>
